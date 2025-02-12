@@ -155,7 +155,8 @@ gcc mat.c -o mat.exe -I D:\sdl\i686-w64-mingw32\include -L D:\sdl\i686-w64-mingw
 ```
 
 ---
-## Ссылки
+
+## Ссылки и источники
 
 - [Github_SDL](https://github.com/libsdl-org/SDL)
 - [Library_SDL3 Download](https://github.com/libsdl-org/SDL/releases)
