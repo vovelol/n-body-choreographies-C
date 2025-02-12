@@ -1,0 +1,101 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}    % Поддержка UTF-8
+\usepackage[T1]{fontenc}
+\usepackage[russian]{babel}    % Русский язык
+\usepackage{amsmath, amssymb}  % Математические пакеты
+\usepackage{geometry}          % Настройка полей
+\geometry{left=2cm, right=2cm, top=2cm, bottom=2cm}
+\usepackage{parskip}           % Отступы между абзацами
+
+\begin{document}
+
+\section*{Математическая формулировка для моделирования хореографий N тел}
+
+Данный документ описывает дифференциальное уравнение, приведённое к каноническому виду, а также численные методы интегрирования, используемые в проекте (методы RK4 и DOPRI8). Кроме того, приводится описание вычисления энергии системы.
+
+\section{Дифференциальное уравнение и каноническая система ОДУ}
+
+Движение каждого тела описывается законом всемирного тяготения Ньютона. Для тела \( i \) с массой \( M \) исходное уравнение второго порядка имеет вид:
+\begin{equation}\label{eq:second_order}
+  \frac{d^2 \mathbf{r}_i}{dt^2} = \sum_{\substack{j=1 \\ j \neq i}}^{N} \frac{GM}{\left\lVert \mathbf{r}_j - \mathbf{r}_i \right\rVert^3} \, (\mathbf{r}_j - \mathbf{r}_i),
+\end{equation}
+где:
+\begin{itemize}
+  \item \(\mathbf{r}_i = (x_i, y_i)\) --- координаты тела \( i \),
+  \item \(G\) --- гравитационная постоянная.
+\end{itemize}
+
+Для приведения системы к виду ОДУ первого порядка вводим скорость:
+\begin{equation}\label{eq:velocity}
+  \mathbf{v}_i = \frac{d \mathbf{r}_i}{dt}.
+\end{equation}
+
+Таким образом, каноническая система ОДУ, которую мы будем интегрировать, выглядит следующим образом:
+\begin{align}
+  \frac{d \mathbf{r}_i}{dt} &= \mathbf{v}_i, \label{eq:canonical1} \\
+  \frac{d \mathbf{v}_i}{dt} &= \sum_{\substack{j=1 \\ j \neq i}}^{N} \frac{GM}{\left\lVert \mathbf{r}_j - \mathbf{r}_i \right\rVert^3} \, (\mathbf{r}_j - \mathbf{r}_i), \quad i = 1, 2, \dots, N. \label{eq:canonical2}
+\end{align}
+
+\section{Численные методы интегрирования}
+
+\subsection{Метод Рунге--Кутты 4-го порядка (RK4)}
+
+Пусть \( y(t) \) --- вектор состояния системы (включающий координаты и скорости всех тел), а \( f(t, y) \) --- функция, вычисляющая его производную. Тогда метод RK4 задаётся следующими формулами:
+\begin{align}
+  k_1 &= f(t, y), \\
+  k_2 &= f\left(t + \frac{h}{2},\, y + \frac{h}{2}\, k_1\right), \\
+  k_3 &= f\left(t + \frac{h}{2},\, y + \frac{h}{2}\, k_2\right), \\
+  k_4 &= f(t + h,\; y + h\, k_3), \\
+  y(t + h) &= y(t) + \frac{h}{6} \left( k_1 + 2k_2 + 2k_3 + k_4 \right),
+\end{align}
+где \( h \) --- шаг интегрирования.
+
+\subsection{Метод Дорманда--Принса 8-го порядка (DOPRI8)}
+
+Метод DOPRI8 --- явный метод Рунге--Кутты с 13 этапами, обеспечивающий 8-ый порядок точности. Он вычисляет промежуточные коэффициенты \( k_i \) по следующей схеме:
+\begin{equation}
+  k_i = f\left(t + c_i\,h,\; y + h\, \sum_{j=1}^{i-1} a_{ij}\, k_j\right), \quad i = 1, 2, \dots, 13,
+\end{equation}
+где \( c_i \) и \( a_{ij} \) --- заранее заданные коэффициенты (табличные значения приведены в исходном коде).
+
+После вычисления всех \( k_i \) состояние обновляется по формуле:
+\begin{equation}
+  y(t+h) = y(t) + h\, \sum_{i=1}^{13} b_i\, k_i,
+\end{equation}
+где \( b_i \) --- фиксированные коэффициенты метода.
+
+\section{Вычисление энергии системы}
+
+Для контроля точности численного интегрирования рассчитывается полная энергия системы, которая состоит из кинетической и потенциальной энергии.
+
+\subsection{Кинетическая энергия}
+
+Кинетическая энергия для \( N \) тел вычисляется по формуле:
+\begin{equation}
+  E_{\text{kin}} = \sum_{i=1}^{N} \frac{1}{2} M \|\mathbf{v}_i\|^2
+  = \sum_{i=1}^{N} \frac{1}{2} M \left( v_{x,i}^2 + v_{y,i}^2 \right).
+\end{equation}
+
+\subsection{Потенциальная энергия}
+
+Гравитационная потенциальная энергия системы:
+\begin{equation}
+  E_{\text{pot}} = - \sum_{i=1}^{N} \sum_{j=i+1}^{N} \frac{GM^2}{\left\lVert \mathbf{r}_j - \mathbf{r}_i \right\rVert}.
+\end{equation}
+
+\subsection{Полная энергия}
+
+Полная энергия системы определяется как:
+\begin{equation}
+  E = E_{\text{kin}} + E_{\text{pot}}.
+\end{equation}
+
+\section{Гравитационное ускорение}
+
+Ускорение тела \( i \) под действием тела \( j \) вычисляется по формуле:
+\begin{equation}
+  \mathbf{a}_{ij} = \frac{GM}{\left\lVert \mathbf{r}_j - \mathbf{r}_i \right\rVert^3} \, (\mathbf{r}_j - \mathbf{r}_i).
+\end{equation}
+Общее ускорение для тела \( i \) получается суммированием вкладов от всех остальных тел.
+
+\end{document}
