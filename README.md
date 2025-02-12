@@ -158,7 +158,7 @@ gcc mat.c -o mat.exe -I D:\sdl\i686-w64-mingw32\include -L D:\sdl\i686-w64-mingw
 ## Ссылки
 
 - [Github_SDL](https://github.com/libsdl-org/SDL)
-- [Библиотека_SDL3 для скачивания](https://github.com/libsdl-org/SDL/releases)
+- [Library_SDL3 Download](https://github.com/libsdl-org/SDL/releases)
 - [Runge–Kutta methods — Wikipedia](https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods)
 - [Dormand–Prince method — Wikipedia](https://en.wikipedia.org/wiki/Dormand%E2%80%93Prince_method)
 - [N-body choreographies — Scholarpedia](https://web.archive.org/web/20190614005846/http://www.scholarpedia.org/article/N-body_choreographies)
