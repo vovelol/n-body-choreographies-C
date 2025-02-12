@@ -13,11 +13,11 @@
 В задаче моделируется движение тел под действием гравитационного взаимодействия. Исходное дифференциальное уравнение второго порядка для каждого тела *i* имеет вид:
 
 $$
-\frac{d^2 \mathbf{r}_i}{dt^2} = \sum_{\substack{j=1 \\ j \neq i}}^{N} \frac{G M}{\|\mathbf{r}_j - \mathbf{r}_i\|^3} \, (\mathbf{r}_j - \mathbf{r}_i),
+\frac{d^2 \mathbf{r}_i}{dt^2} = \sum_{\substack{j=1 \\ j \neq i}}^{N} \frac{G M}{\left\lVert \mathbf{r}_j - \mathbf{r}_i \right\rVert^3} \, (\mathbf{r}_j - \mathbf{r}_i),
 $$
 
 где:
-- \(\mathbf{r}_i = (x_i, y_i)\) — координаты тела *i*,
+- \(\mathbf{r}_i = (x_i, y_i)\) — координаты тела \(i\),
 - \(G\) — гравитационная постоянная,
 - \(M\) — масса каждого тела.
 
